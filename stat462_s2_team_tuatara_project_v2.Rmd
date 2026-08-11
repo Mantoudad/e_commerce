@@ -1,0 +1,342 @@
+---
+title: "STAT462 S2 Team Tuatara Project"
+author: Tingting Guo, Yanxin Hu, Keane Huang, Yiyang Li, Zhonggen Li
+output: html_document
+date: "2026-08-11"
+---
+
+```{=html}
+<style>
+.boxTask {
+background-color: lightblue;
+color: black;
+border: 2px solid black;
+margin: 5px;
+padding: 5px;
+font-style: italic;
+}
+
+.answer {
+background-color: #e7f4e4;
+border: 2px solid #6f2c87;
+}
+
+</style>
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+# un-comment and install following packages if needed
+# install.packages("dplyr")
+# install.packages("tidyverse")
+# install.packages("knitr)
+# install.packages("kableExtra")c
+# install.packages("sjPlot")
+# install.packages("readxl")
+
+# libraries needed for this project
+library(dplyr)
+# library(tidyverse)
+# library(knitr)
+library(kableExtra)
+# library(sjPlot)
+library(readxl)
+```
+
+## 1. Data Dictionary
+
+- `CustomerID`: Unique customer ID  
+  - `five digit number`  
+- `Churn`: Churn Flag  
+  - `0`: 
+  - `1`:   
+- `Tenure`: Tenure of customer in organization  
+  - `number`  
+  - `NA` 
+- `PreferredLoginDevice`: Preferred login device of customer  
+  - `Mobile Phone`  
+  - `Phone` 
+  - `Computer` 
+- `CityTier`: City tier  
+  - `1`: 
+  - `2`: 
+  - `3`: 
+- `WarehouseToHome`: Distance in between warehouse to home of customer  
+  - `number` 
+- `PreferredPaymentMode`: Preferred payment method of customer  
+  - `Debit Card` 
+  - `UPI` 
+  - `CC` 
+  - `Cash on Delivery` 
+  - `E wallet` 
+  - `COD` 
+  - `Credit Card` 
+- `Gender`: Gender of customer  
+  - `Female` 
+  - `Male` 
+- `HourSpendOnApp`: Number of hours spend on mobile application or website 
+  - `1`
+  - `2` 
+  - `3` 
+  - `4`
+  - `5` 
+  - `NA` 
+- `NumberOfDeviceRegistered`: Total number of deceives is registered on particular customer  
+  - `1` 
+  - `2` 
+  - `3`
+  - `4` 
+  - `5` 
+  - `6`
+- `PreferedOrderCat`: Preferred order category of customer in last month  
+  - `Laptop & Accessory` 
+  - `Mobile` 
+  - `Mobile Phone` 
+  - `Others` 
+  - `Fashion` 
+  - `Grocery` 
+- `SatisfactionScore`: Satisfactory score of customer on service  
+  - `1` 
+  - `2` 
+  - `3` 
+  - `4`
+  - `5`
+- `MaritalStatus`: Marital status of customer  
+  - `Single` 
+  - `Divorced` 
+  - `Married` 
+- `NumberOfAddress`: Total number of added added on particular customer  
+  - `number` 
+- `Complain`: Any complaint has been raised in last month  
+  - `1` 
+  - `0` 
+- `OrderAmountHikeFromlastYear`: Percentage increases in order from last year  
+  - `number` 
+  - `NA` 
+- `CouponUsed`: Total number of coupon has been used in last month  
+  - `number` 
+  - `NA` 
+- `OrderCount`: Total number of orders has been places in last month  
+  - `number` 
+  - `NA` 
+- `DaySinceLastOrder`: Day Since last order by customer  
+  - `number` 
+- `CashbackAmount`: Average cashback in last month  
+  - `number` 
+
+
+## 2. Data Preprocessing and EDA 
+
+Remove all un-related research columns and return a whole related dataset if necessary: 
+
+```{r}
+
+# change xlsx file path to your local relative or absolute path to run
+original_data <- read_excel("D:/UC_Courses/STAT462-26S2/group_project/e_commerce/E Commerce Dataset.xlsx", sheet = 2)
+str(original_data)
+
+# check all unique values(12) for each column 
+lapply(original_data, function(x) head(unique(x), 12))
+# remove all un-related columns
+
+# show all column value classes
+
+```
+
+### 2.1 Original Dataset
+
+```{r results='hide'}
+kable(head(original_data)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  scroll_box(height = "200px", width = "100%")
+```
+
+### 2.2 Research Questions Related Dataset
+
+```{r}
+# kable(head(related_data)) %>%
+#   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+#   scroll_box(height = "200px", width = "100%")
+```
+
+## 3. Research Questions
+
+:::{.boxTask}
+
+#### 3.1 Q1: 
+
+:::
+
+:::{.answer}
+
+#### 3.1.1 Sub-question 1
+
+
+##### 3.1.1.1 Sub-question 1 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.1.1.2 Sub-question 1 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.1.1.3 Sub-question 1 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+
+#### 3.1.2 Sub-question 2
+
+
+##### 3.1.2.1 Sub-question 2 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.1.2.2 Sub-question 2 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.1.2.3 Sub-question 2 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+:::
+
+:::{.boxTask}
+
+#### 3.2 Q2: 
+
+:::
+
+:::{.answer}
+
+#### 3.2.1 Sub-question 1
+
+
+##### 3.2.1.1 Sub-question 1 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.2.1.2 Sub-question 1 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.2.1.3 Sub-question 1 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+
+#### 3.2.2 Sub-question 2
+
+
+##### 3.2.2.1 Sub-question 2 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.2.2.2 Sub-question 2 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.2.2.3 Sub-question 2 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+:::
+
+
+:::{.boxTask}
+
+#### 3.3 Q3: 
+
+:::
+
+:::{.answer}
+
+#### 3.3.1 Sub-question 1
+
+
+##### 3.3.1.1 Sub-question 1 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.3.1.2 Sub-question 1 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.3.1.3 Sub-question 1 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+
+#### 3.3.2 Sub-question 2
+
+
+##### 3.3.2.1 Sub-question 2 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.3.2.2 Sub-question 2 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.3.2.3 Sub-question 2 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+:::
+
