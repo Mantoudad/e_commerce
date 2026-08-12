@@ -37,46 +37,47 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 # libraries needed for this project
 library(dplyr)
-# library(tidyverse)
+library(tidyverse)
 # library(knitr)
 library(kableExtra)
 # library(sjPlot)
 library(readxl)
 ```
 
-## 1. Data Dictionary
+## 1. Data Dictionary (original)
 
 - `CustomerID`: Unique customer ID  
   - `five digit number`  
 - `Churn`: Churn Flag  
-  - `0`: 
-  - `1`:   
-- `Tenure`: Tenure of customer in organization  
-  - `number`  
+  - `0`: not churn   
+  - `1`: churn 
+- *`Tenure`: Tenure of customer in organization  
+  - `number`   
   - `NA` 
-- `PreferredLoginDevice`: Preferred login device of customer  
+- *`PreferredLoginDevice`: Preferred login device of customer  
   - `Mobile Phone`  
-  - `Phone` 
+  - `Phone` - cleaned 
   - `Computer` 
-- `CityTier`: City tier  
-  - `1`: 
-  - `2`: 
-  - `3`: 
+- *`CityTier`:    
+  - `1`: Tier 1 City
+  - `2`: Tier 2 City 
+  - `3`: Tier 3 City
 - `WarehouseToHome`: Distance in between warehouse to home of customer  
   - `number` 
-- `PreferredPaymentMode`: Preferred payment method of customer  
+  - `NA`
+- *`PreferredPaymentMode`: Preferred payment method of customer  
   - `Debit Card` 
   - `UPI` 
-  - `CC` 
+  - `CC`: credit card - cleaned  
   - `Cash on Delivery` 
   - `E wallet` 
-  - `COD` 
+  - `COD`: cash on delivery - cleaned  
   - `Credit Card` 
 - `Gender`: Gender of customer  
   - `Female` 
   - `Male` 
-- `HourSpendOnApp`: Number of hours spend on mobile application or website 
-  - `1`
+- *`HourSpendOnApp`: Number of hours spend on mobile application or website 
+  - `1` 
   - `2` 
   - `3` 
   - `4`
@@ -85,32 +86,32 @@ library(readxl)
 - `NumberOfDeviceRegistered`: Total number of deceives is registered on particular customer  
   - `1` 
   - `2` 
-  - `3`
+  - `3` 
   - `4` 
   - `5` 
-  - `6`
-- `PreferedOrderCat`: Preferred order category of customer in last month  
+  - `6` 
+- *`PreferedOrderCat`: Preferred order category of customer in last month  
   - `Laptop & Accessory` 
-  - `Mobile` 
+  - `Mobile` - cleaned 
   - `Mobile Phone` 
   - `Others` 
   - `Fashion` 
   - `Grocery` 
 - `SatisfactionScore`: Satisfactory score of customer on service  
-  - `1` 
+  - `1`: least satisfy 
   - `2` 
   - `3` 
-  - `4`
-  - `5`
+  - `4` 
+  - `5`: most satisfy
 - `MaritalStatus`: Marital status of customer  
   - `Single` 
   - `Divorced` 
   - `Married` 
 - `NumberOfAddress`: Total number of added added on particular customer  
   - `number` 
-- `Complain`: Any complaint has been raised in last month  
-  - `1` 
-  - `0` 
+- `Complain`: Any complaint has been raised in last month
+  - `1`: complained  
+  - `0`: not complained  
 - `OrderAmountHikeFromlastYear`: Percentage increases in order from last year  
   - `number` 
   - `NA` 
@@ -122,6 +123,7 @@ library(readxl)
   - `NA` 
 - `DaySinceLastOrder`: Day Since last order by customer  
   - `number` 
+  - `NA`
 - `CashbackAmount`: Average cashback in last month  
   - `number` 
 
@@ -137,27 +139,68 @@ original_data <- read_excel("D:/UC_Courses/STAT462-26S2/group_project/e_commerce
 str(original_data)
 
 # check all unique values(12) for each column 
-lapply(original_data, function(x) head(unique(x), 12))
-# remove all un-related columns
-
-# show all column value classes
+lapply(original_data, function(x) head(unique(x), 20))
 
 ```
 
 ### 2.1 Original Dataset
 
-```{r results='hide'}
+```{r}
 kable(head(original_data)) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
   scroll_box(height = "200px", width = "100%")
 ```
 
-### 2.2 Research Questions Related Dataset
+### 2.2 Research Questions Related Cleaned Dataset
 
 ```{r}
-# kable(head(related_data)) %>%
-#   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
-#   scroll_box(height = "200px", width = "100%")
+# remove all un-related columns
+# TODO: 
+
+# TODO: adjust the NA value replacement methods depending on your research question
+# Feature columns cleaning 
+summary(original_data$Tenure)
+
+cleaned_data <- original_data %>% 
+  # replace Tenure NA value with 0
+  mutate(Tenure = replace_na(Tenure, 0)) %>% 
+  # change the duplicate values of "PreferredPaymentMode
+  mutate(PreferredPaymentMode = recode(PreferredPaymentMode, 
+                                       "CC" = "Credit Card", 
+                                       "COD" = "Cash on Delivery")) %>% 
+  # use median value to replace NA value for WarehouseToHome
+  mutate(WarehouseToHome = replace_na(WarehouseToHome, 
+                                    median(WarehouseToHome, na.rm = TRUE))) %>% 
+  # change the duplicate values of PreferredLoginDevice 
+  mutate(PreferredLoginDevice = recode(PreferredLoginDevice, 
+                                       "Phone" = "Mobile Phone")) %>% 
+  # use median value to replace NA value for HourSPendOnApp
+  mutate(HourSpendOnApp = replace_na(HourSpendOnApp, 
+                                     median(HourSpendOnApp, na.rm = TRUE))) %>% 
+  # change the duplicate values of PreferedOrderCat 
+  mutate(PreferedOrderCat = recode(PreferedOrderCat, 
+                                   "Moblie" = "Mobile Phone")) %>% 
+  # use median value to replace NA value for OrderAmountHikeFromlastYear
+  mutate(OrderAmountHikeFromlastYear = replace_na(OrderAmountHikeFromlastYear, 
+                        median(OrderAmountHikeFromlastYear, na.rm = TRUE))) %>% 
+  # use median value to replace NA value for CouponUsed
+  mutate(CouponUsed = replace_na(CouponUsed, median(CouponUsed, 
+                                                    na.rm = TRUE))) %>% 
+  # use median value to replace NA value for OrderCount
+  mutate(OrderCount = replace_na(OrderCount, median(OrderCount, 
+                                                    na.rm = TRUE))) %>% 
+  # use median value to replace NA value for DaySinceLastOrder
+  mutate(DaySinceLastOrder = replace_na(DaySinceLastOrder,
+                                        median(DaySinceLastOrder, 
+                                               na.rm = TRUE)))
+
+```
+
+```{r}
+# show the cleaned data table 
+kable(head(cleaned_data)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  scroll_box(height = "200px", width = "100%")
 ```
 
 ## 3. Research Questions
@@ -340,3 +383,120 @@ __Findings and Conclusions__
 
 :::
 
+:::{.boxTask}
+
+#### 3.4 Q4: 
+
+:::
+
+:::{.answer}
+
+#### 3.4.1 Sub-question 1
+
+
+##### 3.4.1.1 Sub-question 1 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.4.1.2 Sub-question 1 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.4.1.3 Sub-question 1 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+
+#### 3.4.2 Sub-question 2
+
+
+##### 3.4.2.1 Sub-question 2 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.4.2.2 Sub-question 2 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.4.2.3 Sub-question 2 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+:::
+
+:::{.boxTask}
+
+#### 3.5 Q5: 
+
+:::
+
+:::{.answer}
+
+#### 3.5.1 Sub-question 1
+
+
+##### 3.5.1.1 Sub-question 1 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.5.1.2 Sub-question 1 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.5.1.3 Sub-question 1 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+
+#### 3.5.2 Sub-question 2
+
+
+##### 3.5.2.1 Sub-question 2 Related task 1
+__Data Processing if Necessary__
+
+```{r results='hide'}
+
+```
+
+##### 3.5.2.2 Sub-question 2 Related task 2
+__Plots__
+
+```{r}
+
+```
+
+##### 3.5.2.3 Sub-question 2 Related task 3
+__Findings and Conclusions__
+
+```{r}
+
+```
+
+:::
